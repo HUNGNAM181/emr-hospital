@@ -27,26 +27,30 @@
 // }
 // testConst();
 
-function addPatient(patients, newPatient) {
-  return [...patients, newPatient];
-}
 const patients = [
   { id: "1", name: "Nguyễn Hưng Nam", age: 22 },
   { id: "2", name: "Bùi Thị Hà", age: 22 },
 ];
+
+console.log("------------------- ADD Patient ---------------");
+
+function addPatient(patients, newPatient) {
+  return [...patients, newPatient];
+}
+
 const newPatient = { id: "3", name: "Lê Văn C", age: 30 };
 const resultAddPatient = addPatient(patients, newPatient);
 console.log(resultAddPatient);
 
 console.log("------------------- Update Patient ---------------");
-const updatePatient = (patients, updatedPatient) => {
-  return patients.map((patient) => {
-    if (patient.id === updatedPatient.id) {
-      return { ...patient, ...updatedPatient };
-    }
-    return patient;
-  });
+
+const updatePatient = (patients, id, Update) => {
+  return patients.map((patient) =>
+    patient.id === id ? { ...patient, ...Update } : patient
+  );
 };
-const UserUpdate = { id: "1", age: 24 };
-const resultUpdate = updatePatient(patients, UserUpdate);
+
+const resultUpdate = updatePatient(patients, "2", { name: "TEST!@#" });
 console.log(resultUpdate);
+
+console.log("------------------- DELETE Patient ---------------");
