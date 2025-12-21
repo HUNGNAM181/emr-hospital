@@ -85,3 +85,32 @@ const patient = patientMap.get("2");
 
 console.log(isPatient);
 console.log(patient);
+
+console.log("----------JavaScript - Async/Await và Promise ----------");
+
+const fetchPatients = () => {
+  return new Promise((reslove, reject) => {
+    setTimeout(() => {
+      const isSuccess = false;
+      if (isSuccess) {
+        reslove([
+          { id: "1", name: "Nguyễn Hưng Nam", age: 22 },
+          { id: "2", name: "Bùi Thị Hà", age: 22 },
+          { id: "3", name: "Bui Van Lam", age: 24 },
+        ]);
+      } else {
+        reject("Lỗi không lấy được dữ liệu");
+      }
+    }, 1000);
+  });
+};
+
+const displayPatients = async () => {
+  try {
+    const patients = await fetchPatients();
+    console.log(patients);
+  } catch (error) {
+    console.log(error);
+  }
+};
+displayPatients();
