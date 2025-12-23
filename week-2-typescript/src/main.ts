@@ -1,39 +1,56 @@
 import { Patient } from "./models/patient";
 import { Role } from "./models/role";
+import { Doctor } from "./models/doctor";
 
 // ===================== DATA =====================
 const patients: Patient[] = [
-  { id: "1", name: "Nguyễn Hưng Nam", age: 22, gender: "male" },
-  { id: "2", name: "Bùi Thị Hà", age: 22, gender: "female" },
-  { id: "3", name: "Bui Van Lam", age: 24, gender: "male" },
+  {
+    id: "1",
+    name: "Nguyễn Hưng Nam",
+    age: 22,
+    gender: "male",
+    role: Role.Patient,
+  },
+  {
+    id: "2",
+    name: "Bùi Thị Hà",
+    age: 22,
+    gender: "female",
+    role: Role.Patient,
+  },
+  { id: "3", name: "Bui Van Lam", age: 24, gender: "male", role: Role.Patient },
 ];
 
 // ===================== FUNCTIONS =====================
-function addNewPatient(patients: Patient[], newPatient: Patient): Patient[] {
-  return [...patients, newPatient];
+function addItem<T>(items: T[], newItem: T): T[] {
+  return [...items, newItem];
 }
 
-function updatePatient(
-  patients: Patient[],
+function updateItemById<T extends { id: string }>(
+  items: T[],
   id: string,
-  updateInfo: Partial<Patient>
-): Patient[] {
-  return patients.map((patient) =>
-    patient.id === id ? { ...patient, ...updateInfo } : patient
+  updateInfo: Partial<T>
+): T[] {
+  return items.map((item) =>
+    item.id === id ? { ...item, ...updateInfo } : item
   );
 }
 
-function deletePatient(patients: Patient[], id: string): Patient[] {
-  return patients.filter((patient) => patient.id !== id);
+function deleteItemById<T extends { id: string }>(items: T[], id: string): T[] {
+  return items.filter((item) => item.id !== id);
 }
 
-function searchPatient(
-  patients: Patient[],
+function searchItem<T extends { id: string; name: string }>(
+  items: T[],
   keyword: string
-): Patient | undefined {
-  return patients.find(
-    (patient) => patient.id === keyword || patient.name === keyword
-  );
+): T | undefined {
+  return items.find((item) => item.id === keyword || item.name === keyword);
+}
+
+// type guards cơ bản
+// function checkAge(patient: Patient): boolean {
+function checkAge(patient: Patient): patient is Patient {
+  return patient.age > 0;
 }
 
 function getPatientInfo(patient: Patient): string {
@@ -65,17 +82,18 @@ const newPatient: Patient = {
   name: "Lê Văn C",
   age: 30,
   gender: "other",
+  role: Role.Patient,
 };
-console.log(addNewPatient(patients, newPatient));
+console.log(addItem<Patient>(patients, newPatient));
 
 console.log("------------------- UPDATE Patient ---------------");
-console.log(updatePatient(patients, "3", { gender: "other" }));
+console.log(updateItemById<Patient>(patients, "3", { gender: "other" }));
 
 console.log("------------------- DELETE Patient ---------------");
-console.log(deletePatient(patients, "3"));
+console.log(deleteItemById<Patient>(patients, "3"));
 
 console.log("------------------- SEARCH Patient ---------------");
-const foundPatient = searchPatient(patients, "2");
+const foundPatient = searchItem<Patient>(patients, "2");
 if (foundPatient) {
   console.log(getPatientInfo(foundPatient));
 }
@@ -87,3 +105,15 @@ console.log(patientMap.get("3"));
 
 console.log("---------- Async / Await ----------");
 displayPatients();
+
+console.log("---------- Test checkAge sử dụng type guards cơ bản ----------");
+
+const testPatient: Patient = {
+  id: "5",
+  name: "Ngo QUang Hieu",
+  age: 26,
+  gender: "male",
+  role: Role.Patient,
+};
+
+console.log(checkAge(testPatient));

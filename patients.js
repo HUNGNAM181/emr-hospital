@@ -89,11 +89,11 @@ console.log(patient);
 console.log("----------JavaScript - Async/Await và Promise ----------");
 
 const fetchPatients = () => {
-  return new Promise((reslove, reject) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
       const isSuccess = false;
       if (isSuccess) {
-        reslove([
+        resolve([
           { id: "1", name: "Nguyễn Hưng Nam", age: 22 },
           { id: "2", name: "Bùi Thị Hà", age: 22 },
           { id: "3", name: "Bui Van Lam", age: 24 },
