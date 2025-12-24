@@ -1,26 +1,23 @@
 import { Patient } from "./models/patient";
 import { Role } from "./models/role";
 import { Doctor } from "./models/doctor";
+import { MedicalRecord } from "./models/MedicalRecord";
+import { patients } from "./patients";
+import { Log } from "./decorator/log.decorator";
 
-// ===================== DATA =====================
-const patients: Patient[] = [
-  {
-    id: "1",
-    name: "Nguyễn Hưng Nam",
-    age: 22,
-    gender: "male",
-    role: Role.Patient,
-  },
-  {
-    id: "2",
-    name: "Bùi Thị Hà",
-    age: 22,
-    gender: "female",
-    role: Role.Patient,
-  },
-  { id: "3", name: "Bui Van Lam", age: 24, gender: "male", role: Role.Patient },
-];
+export class PatientService {
+  @Log
+  addPatient(patients: Patient[], newPatient: Patient): Patient[] {
+    return addItem(patients, newPatient);
+  }
+}
 
+// sử dụng Pick<MedicalRecord, 'id' | 'date'> cho views ngắn gọn.
+function getMedicalRecordSummary(
+  record: Pick<MedicalRecord, "id" | "date">
+): void {
+  console.log("Record:", record.id, record.date);
+}
 // ===================== FUNCTIONS =====================
 function addItem<T>(items: T[], newItem: T): T[] {
   return [...items, newItem];
@@ -60,7 +57,7 @@ function getPatientInfo(patient: Patient): string {
 function fetchPatientData(): Promise<Patient[]> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const isSuccess = true;
+      const isSuccess = false;
       isSuccess ? resolve(patients) : reject("Lỗi không lấy được dữ liệu");
     }, 1000);
   });
@@ -104,7 +101,7 @@ console.log(patientMap.has("2"));
 console.log(patientMap.get("3"));
 
 console.log("---------- Async / Await ----------");
-displayPatients();
+// displayPatients();
 
 console.log("---------- Test checkAge sử dụng type guards cơ bản ----------");
 
@@ -117,3 +114,23 @@ const testPatient: Patient = {
 };
 
 console.log(checkAge(testPatient));
+
+const service = new PatientService();
+service.addPatient(patients, {
+  id: "4",
+  name: "Nguyễn Văn A",
+  age: 30,
+  gender: "male",
+  role: Role.Patient,
+});
+
+console.log(
+  "----------sử dụng Pick<MedicalRecord, 'id' | 'date'> -------------"
+);
+const testMedicalRecord: MedicalRecord = {
+  id: "181",
+  patientId: "P001",
+  date: new Date("2024-01-01"),
+  diagnosis: "Common cold",
+};
+getMedicalRecordSummary(testMedicalRecord);
