@@ -1,5 +1,6 @@
-import { Patient } from "./models/patient";
-import { Role } from "./models/role";
+import { Patient } from "../models/patient";
+import { Role } from "../models/role";
+import { Status } from "../models/status";
 // ===================== DATA =====================
 export const patients: Patient[] = [
   {
@@ -8,6 +9,7 @@ export const patients: Patient[] = [
     age: 22,
     gender: "male",
     role: Role.Patient,
+    status: Status.Active,
   },
   {
     id: "2",
@@ -15,6 +17,14 @@ export const patients: Patient[] = [
     age: 22,
     gender: "female",
     role: Role.Patient,
+    status: Status.Active,
   },
-  { id: "3", name: "Bui Van Lam", age: 24, gender: "male", role: Role.Patient },
+  {
+    id: "3",
+    name: "Bui Van Lam",
+    age: 24,
+    gender: "male",
+    role: Role.Patient,
+    status: Status.Active,
+  },
 ];

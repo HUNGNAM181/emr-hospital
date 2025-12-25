@@ -2,8 +2,23 @@ import { Patient } from "./models/patient";
 import { Role } from "./models/role";
 import { Doctor } from "./models/doctor";
 import { MedicalRecord } from "./models/MedicalRecord";
-import { patients } from "./patients";
+import { patients } from "./data/patients";
 import { Log } from "./decorator/log.decorator";
+import {
+  addItem,
+  updateItemById,
+  deleteItemById,
+  searchItem,
+} from "./utils/collectionHelpers";
+import { calculateBMI } from "./Integration with JS/legacy";
+import { handleCreateRecord } from "./feature/medical-record/handleCreateRecord";
+import { creatPatient } from "./feature/patient/creatPatient";
+import { Status } from "./models/status";
+
+// type guard
+function isPatient(obj: any): obj is Patient {
+  return typeof obj.age === "number" && typeof obj.name === "string";
+}
 
 export class PatientService {
   @Log
@@ -17,31 +32,6 @@ function getMedicalRecordSummary(
   record: Pick<MedicalRecord, "id" | "date">
 ): void {
   console.log("Record:", record.id, record.date);
-}
-// ===================== FUNCTIONS =====================
-function addItem<T>(items: T[], newItem: T): T[] {
-  return [...items, newItem];
-}
-
-function updateItemById<T extends { id: string }>(
-  items: T[],
-  id: string,
-  updateInfo: Partial<T>
-): T[] {
-  return items.map((item) =>
-    item.id === id ? { ...item, ...updateInfo } : item
-  );
-}
-
-function deleteItemById<T extends { id: string }>(items: T[], id: string): T[] {
-  return items.filter((item) => item.id !== id);
-}
-
-function searchItem<T extends { id: string; name: string }>(
-  items: T[],
-  keyword: string
-): T | undefined {
-  return items.find((item) => item.id === keyword || item.name === keyword);
 }
 
 // type guards cơ bản
@@ -72,6 +62,39 @@ async function displayPatients(): Promise<void> {
   }
 }
 
+console.log("---------- TEST ---------------");
+
+const data: any = { name: "ALo", age: 1 };
+if (isPatient(data)) {
+  console.log("Patient hợp lệ:", data);
+} else {
+  console.log("Patient không hợp lệ");
+}
+
+console.log("---------- Test integration with JS ---------");
+console.log(calculateBMI(72, 1.75));
+
+console.log(
+  "----------Test Validate input cho MedicalRecord, Patient với guards ---------"
+);
+
+handleCreateRecord({
+  id: "200",
+  patientId: "P002",
+  date: "2003-01-10",
+  diagnosis: "Flu",
+});
+
+creatPatient({
+  id: "25",
+  name: "Quang",
+  age: 22,
+  gender: "male",
+  role: Role.Patient,
+  status: Status.Active,
+});
+
+/*
 // ===================== DEMO / EXECUTION =====================
 console.log("------------------- ADD Patient ---------------");
 const newPatient: Patient = {
@@ -133,4 +156,4 @@ const testMedicalRecord: MedicalRecord = {
   date: new Date("2024-01-01"),
   diagnosis: "Common cold",
 };
-getMedicalRecordSummary(testMedicalRecord);
+getMedicalRecordSummary(testMedicalRecord);*/
