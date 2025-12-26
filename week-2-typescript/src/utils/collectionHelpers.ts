@@ -20,9 +20,9 @@ export function deleteItemById<T extends { id: string }>(
   return items.filter((item) => item.id !== id);
 }
 
-export function searchItem<T extends { id: string; name: string }>(
+export function searchItem<T extends { id: string }>(
   items: T[],
   keyword: string
 ): T | undefined {
-  return items.find((item) => item.id === keyword || item.name === keyword);
+  return items.find((item) => item.id === keyword);
 }

@@ -1,10 +1,12 @@
 import { Role } from "./role";
 import { Status } from "./status";
-export interface Patient {
-  id: string;
+import { IIdentifiable } from "./IIdentifiable";
+import { MedicalRecord } from "./MedicalRecord";
+export interface Patient extends IIdentifiable {
   name: string;
   age: number;
   gender: "male" | "female" | "other";
   role: Role.Patient;
   status: Status;
+  records?: MedicalRecord[];
 }

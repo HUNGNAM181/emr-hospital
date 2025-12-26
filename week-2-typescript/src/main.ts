@@ -1,6 +1,4 @@
 import { Patient } from "./models/patient";
-import { Role } from "./models/role";
-import { Doctor } from "./models/doctor";
 import { MedicalRecord } from "./models/MedicalRecord";
 import { patients } from "./data/patients";
 import { Log } from "./decorator/log.decorator";
@@ -10,17 +8,17 @@ import {
   deleteItemById,
   searchItem,
 } from "./utils/collectionHelpers";
-import { calculateBMI } from "./Integration with JS/legacy";
-import { handleCreateRecord } from "./feature/medical-record/handleCreateRecord";
-import { creatPatient } from "./feature/patient/creatPatient";
-import { Status } from "./models/status";
+import { GenericRepository } from "./repository/genericRepository";
+import { PrescriptionService } from "./services/prescriptionService";
+import { Prescription } from "./models/Prescription";
 
 // type guard
 function isPatient(obj: any): obj is Patient {
   return typeof obj.age === "number" && typeof obj.name === "string";
 }
 
-export class PatientService {
+// decorator
+export class PatienttService {
   @Log
   addPatient(patients: Patient[], newPatient: Patient): Patient[] {
     return addItem(patients, newPatient);
@@ -62,38 +60,30 @@ async function displayPatients(): Promise<void> {
   }
 }
 
-console.log("---------- TEST ---------------");
+console.log("-------------Test Input Prescription -------------");
+const prescriptionRepo = new GenericRepository<Prescription>();
+const medicalRecordRepo = new GenericRepository<MedicalRecord>();
 
-const data: any = { name: "ALo", age: 1 };
-if (isPatient(data)) {
-  console.log("Patient hợp lệ:", data);
-} else {
-  console.log("Patient không hợp lệ");
-}
-
-console.log("---------- Test integration with JS ---------");
-console.log(calculateBMI(72, 1.75));
-
-console.log(
-  "----------Test Validate input cho MedicalRecord, Patient với guards ---------"
-);
-
-handleCreateRecord({
-  id: "200",
-  patientId: "P002",
-  date: "2003-01-10",
+// thêm record giả để test quan hệ
+medicalRecordRepo.add({
+  id: "mr1",
+  patientId: "p1",
+  doctorId: "d1",
   diagnosis: "Flu",
+  date: new Date("2025-01-01"),
+  prescriptions: [],
 });
 
-creatPatient({
-  id: "25",
-  name: "Quang",
-  age: 22,
-  gender: "male",
-  role: Role.Patient,
-  status: Status.Active,
+const service = new PrescriptionService(prescriptionRepo, medicalRecordRepo);
+
+service.create({
+  id: "pr1",
+  medicalRecordId: "mr1",
+  medicine: "Paracetamol",
+  dosage: "2/day",
 });
 
+console.log("PASS — created prescription:", service.getById("pr1"));
 /*
 // ===================== DEMO / EXECUTION =====================
 console.log("------------------- ADD Patient ---------------");
@@ -138,7 +128,7 @@ const testPatient: Patient = {
 
 console.log(checkAge(testPatient));
 
-const service = new PatientService();
+const service = new PatienttService();
 service.addPatient(patients, {
   id: "4",
   name: "Nguyễn Văn A",
@@ -156,4 +146,36 @@ const testMedicalRecord: MedicalRecord = {
   date: new Date("2024-01-01"),
   diagnosis: "Common cold",
 };
-getMedicalRecordSummary(testMedicalRecord);*/
+getMedicalRecordSummary(testMedicalRecord);
+console.log("---------- TEST ---------------");
+
+const data: any = { name: "ALo", age: 1 };
+if (isPatient(data)) {
+  console.log("Patient hợp lệ:", data);
+} else {
+  console.log("Patient không hợp lệ");
+}
+
+console.log("---------- Test integration with JS ---------");
+console.log(calculateBMI(72, 1.75));
+
+console.log(
+  "----------Test Validate input cho MedicalRecord, Patient với guards ---------"
+);
+
+handleCreateRecord({
+  id: "200",
+  patientId: "P002",
+  date: "2003-01-10",
+  diagnosis: "Flu",
+});
+
+creatPatient({
+  id: "25",
+  name: "Quang",
+  age: 22,
+  gender: "male",
+  role: Role.Patient,
+  status: Status.Active,
+});
+*/
