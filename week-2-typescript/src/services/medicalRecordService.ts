@@ -1,6 +1,6 @@
 import { IRepository } from "../repository/repository";
 import { MedicalRecord } from "../models/MedicalRecord";
-import { validateMedicalRecord } from "../feature/medical-record/medicalRecordValidator";
+import { validateMedicalRecord } from "../validation/medicalRecordValidator";
 import { Patient } from "../models/patient";
 import { Doctor } from "../models/doctor";
 

@@ -1,8 +1,8 @@
-import { Patient } from "../../models/patient";
-import { Status } from "../../models/status";
-import { Role } from "../../models/role";
-import { MedicalRecord } from "../../models/MedicalRecord";
-import { validateMedicalRecord } from "../medical-record/medicalRecordValidator";
+import { Patient } from "../models/patient";
+import { Status } from "../models/status";
+import { Role } from "../models/role";
+import { MedicalRecord } from "../models/MedicalRecord";
+import { validateMedicalRecord } from "./medicalRecordValidator";
 
 export function validatePatient(obj: any): obj is Patient {
   if (!obj || typeof obj !== "object")

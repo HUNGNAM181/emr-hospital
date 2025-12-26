@@ -1,5 +1,5 @@
-import { Doctor } from "../../models/doctor";
-import { Role } from "../../models/role";
+import { Doctor } from "../models/doctor";
+import { Role } from "../models/role";
 
 export function validateDoctor(obj: any): obj is Doctor {
   if (!obj || typeof obj !== "object")

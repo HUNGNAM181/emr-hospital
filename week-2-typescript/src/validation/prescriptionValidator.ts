@@ -1,4 +1,4 @@
-import { Prescription } from "../../models/Prescription";
+import { Prescription } from "../models/Prescription";
 export function validatePrescription(pres: any): pres is Prescription {
   if (!pres || typeof pres !== "object") {
     throw new Error("Prescription must be an object");

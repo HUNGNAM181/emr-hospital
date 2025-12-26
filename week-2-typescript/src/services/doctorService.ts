@@ -1,6 +1,6 @@
 import { IRepository } from "../repository/repository";
 import { Doctor } from "../models/doctor";
-import { validateDoctor } from "../feature/doctor/doctorValidator";
+import { validateDoctor } from "../validation/doctorValidator";
 
 export class DoctorService {
   constructor(private repo: IRepository<Doctor>) {}

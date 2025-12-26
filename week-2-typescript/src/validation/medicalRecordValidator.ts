@@ -1,4 +1,4 @@
-import { MedicalRecord } from "../../models/MedicalRecord";
+import { MedicalRecord } from "../models/MedicalRecord";
 
 export function validateMedicalRecord(obj: any): obj is MedicalRecord {
   if (!obj || typeof obj !== "object")
