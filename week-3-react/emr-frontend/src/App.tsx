@@ -1,11 +1,11 @@
-import { PatientPage } from "./components/PatientPage";
+import { PatientList } from "./components/PatientList";
 
 import "./App.css";
 
 function App() {
   return (
     <>
-      <PatientPage />
+      <PatientList />
     </>
   );
 }
