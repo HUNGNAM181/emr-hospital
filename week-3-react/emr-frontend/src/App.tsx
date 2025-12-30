@@ -1,11 +1,16 @@
-import { PatientList } from "./components/PatientList";
+import { NewPatient } from "./models/newPatient";
+import { PatientForm } from "./components/PatientForm";
 
 import "./App.css";
 
 function App() {
+  const handleAdd = (patient: NewPatient) => {
+    console.log("PATIENT:", patient);
+  };
+
   return (
     <>
-      <PatientList />
+      <PatientForm onAdd={handleAdd} />
     </>
   );
 }
