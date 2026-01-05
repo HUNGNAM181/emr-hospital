@@ -1,23 +1,29 @@
 import { useState } from "react";
-import { NewPatient } from "../models/newPatient";
+import { NewPatient } from "../../models/newPatient";
 import { PatientForm } from "./PatientForm";
-import InputField from "./InputField";
-import SelectField from "./SelectField";
-import Button from "./Button";
-import { useFormValidation } from "../hooks/useFormValidation";
+import InputField from "../inputs/InputField";
+import SelectField from "../inputs/SelectField";
+import Button from "../Button";
+import { useFormValidation } from "../../hooks/useFormValidation";
 
-export function CreatePatientForm({
-  onAdd,
+type PatientFormState = Omit<NewPatient, "age"> & {
+  age: number | "";
+};
+
+export function PatientFormEditor({
+  initial,
+  mode = "create",
+  onSubmit,
 }: {
-  onAdd: (p: NewPatient) => void;
+  initial?: NewPatient;
+  mode?: "create" | "edit";
+  onSubmit: (p: NewPatient) => void;
 }) {
-  const [form, setForm] = useState<NewPatient>({
-    name: "",
-    age: 0,
-    gender: "male",
-    phone: "",
-    address: "",
-  });
+  const [form, setForm] = useState<PatientFormState>(
+    initial
+      ? { ...initial, age: initial.age }
+      : { name: "", age: "", gender: "male", phone: "", address: "" }
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -26,7 +32,7 @@ export function CreatePatientForm({
 
     setForm((prev) => ({
       ...prev,
-      [name]: name === "age" ? Number(value) : value,
+      [name]: name === "age" ? (value === "" ? "" : Number(value)) : value,
     }));
   };
 
@@ -35,7 +41,7 @@ export function CreatePatientForm({
       validate: (f) => f.name !== "" && f.phone !== "" && f.address !== "",
       message: "Các trường bắt buộc không được để trống",
     },
-    { validate: (f) => f.age > 0, message: "Tuổi phải lớn hơn 0" },
+    { validate: (f) => Number(f.age) > 0, message: "Tuổi phải lớn hơn 0" },
     {
       validate: (f) => /^[0-9]{9,11}$/.test(f.phone),
       message: "Số điện thoại không hợp lệ",
@@ -46,15 +52,21 @@ export function CreatePatientForm({
     e.preventDefault();
     if (!validate()) return;
 
-    onAdd(form);
-
-    setForm({
-      name: "",
-      age: 0,
-      gender: "male",
-      phone: "",
-      address: "",
+    onSubmit({
+      ...form,
+      age: Number(form.age),
     });
+
+    // Reset lại chỉ khi CREATE
+    if (mode === "create") {
+      setForm({
+        name: "",
+        age: "",
+        gender: "male",
+        phone: "",
+        address: "",
+      });
+    }
   };
 
   return (
@@ -93,7 +105,6 @@ export function CreatePatientForm({
         value={form.phone}
         onChange={handleChange}
       />
-
       <InputField
         name="address"
         label="Địa chỉ"
@@ -101,7 +112,9 @@ export function CreatePatientForm({
         onChange={handleChange}
       />
 
-      <Button type="submit">Thêm bệnh nhân</Button>
+      <Button type="submit">
+        {mode === "edit" ? "Lưu thay đổi" : "Thêm bệnh nhân"}
+      </Button>
     </PatientForm>
   );
 }

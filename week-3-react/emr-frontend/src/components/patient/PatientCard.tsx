@@ -1,4 +1,4 @@
-import type { Patient } from "../models/patient";
+import { Patient } from "../../models/patient";
 
 export function PatientCard({ patient }: { patient: Patient }) {
   return (

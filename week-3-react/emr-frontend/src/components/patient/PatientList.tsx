@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Patient } from "../models/patient";
+import { Patient } from "../../models/patient";
 
 export function PatientList() {
   const [patients, setPatients] = useState<Patient[]>([]);

@@ -13,7 +13,6 @@ export function PatientForm({
 }: PatientFormShellProps) {
   return (
     <form onSubmit={onSubmit} className="mb-3">
-      <h5>Thêm bệnh nhân mới</h5>
       {error && <p className="text-danger">{error}</p>}
       {children}
     </form>
