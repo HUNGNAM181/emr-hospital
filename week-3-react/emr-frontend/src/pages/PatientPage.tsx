@@ -5,6 +5,7 @@ import { PatientFormEditor } from "../components/forms/PatientFormEditor";
 import { NewPatientList } from "../components/patient/NewPatientList";
 import { Modal } from "../components/modals/Modal";
 import { DeleteModal } from "../components/modals/DeleteModal";
+import { Toast } from "../components/Toast/Toast";
 
 export default function PatientPage() {
   const [patients, setPatients] = useState<NewPatient[]>([]);
@@ -14,8 +15,21 @@ export default function PatientPage() {
 
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
 
+  type ToastType = "success" | "info" | "warning" | "danger";
+  interface ToastState {
+    message: string;
+    type: ToastType;
+  }
+
+  const [toast, setToast] = useState<ToastState | null>(null);
+
+  const showToast = (message: string, type: ToastType) => {
+    setToast({ message, type });
+  };
+
   const handleAdd = (p: NewPatient) => {
     setPatients((prev) => [...prev, p]);
+    showToast("Thêm bệnh nhân thành công!", "success");
   };
 
   const handleEditSave = (updated: NewPatient) => {
@@ -23,6 +37,7 @@ export default function PatientPage() {
       prev.map((p, i) => (i === editingIndex ? updated : p))
     );
     setEditingIndex(null);
+    showToast("Cập nhật bệnh nhân thành công!", "info");
   };
 
   const handleDeleteRequest = (index: number) => {
@@ -39,6 +54,7 @@ export default function PatientPage() {
     }
 
     setDeletingIndex(null);
+    showToast("Xoá bệnh nhân thành công!", "danger");
   };
 
   return (
@@ -89,6 +105,14 @@ export default function PatientPage() {
           message={`Bạn có chắc muốn xoá bệnh nhân "${patients[deletingIndex].name}"?`}
           onCancel={() => setDeletingIndex(null)}
           onConfirm={handleConfirmDelete}
+        />
+      )}
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
         />
       )}
     </div>

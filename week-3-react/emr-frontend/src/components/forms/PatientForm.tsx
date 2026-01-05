@@ -1,19 +1,13 @@
 import { ReactNode, FormEvent } from "react";
 
-interface PatientFormShellProps {
+interface PatientFormProps {
   children: ReactNode;
-  error: string | null;
   onSubmit: (e: FormEvent) => void;
 }
 
-export function PatientForm({
-  children,
-  error,
-  onSubmit,
-}: PatientFormShellProps) {
+export function PatientForm({ children, onSubmit }: PatientFormProps) {
   return (
-    <form onSubmit={onSubmit} className="mb-3">
-      {error && <p className="text-danger">{error}</p>}
+    <form onSubmit={onSubmit} className="mb-3" noValidate>
       {children}
     </form>
   );

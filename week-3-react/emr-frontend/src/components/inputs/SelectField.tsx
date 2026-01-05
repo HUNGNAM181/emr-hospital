@@ -14,7 +14,9 @@ export default function SelectField({
 }: PropSelectField) {
   return (
     <div className="mb-2">
-      <label className="form-label">{label}</label>
+      <label className="form-label" htmlFor={name}>
+        {label}
+      </label>
       <select id={name} name={name} className="form-select" {...props}>
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>
