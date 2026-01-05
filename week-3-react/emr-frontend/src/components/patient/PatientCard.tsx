@@ -1,29 +1,39 @@
-import { Patient } from "../../models/patient";
+import { NewPatient } from "../../models/newPatient";
 
-export function PatientCard({ patient }: { patient: Patient }) {
+export function PatientCard({
+  patient,
+  index,
+  onEdit,
+  onDelete,
+}: {
+  patient: NewPatient;
+  index: number;
+  onEdit: (index: number) => void;
+  onDelete: (index: number) => void;
+}) {
   return (
-    <div className="card shadow-sm mb-3">
-      <div className="card-body">
-        <h5 className="card-title fw-bold">{patient.name}</h5>
-
-        <p className="mb-1">
-          <span className="fw-semibold">Tuổi:</span> {patient.age}
-        </p>
-
-        <p className="mb-1">
-          <span className="fw-semibold">Giới tính:</span> {patient.gender}
-        </p>
-
-        <p className="mb-1">
-          <span className="fw-semibold">Trạng thái:</span>{" "}
-          <span className="badge bg-primary">{patient.status}</span>
-        </p>
-
-        <p className="mb-0">
-          <span className="fw-semibold">Số hồ sơ bệnh án:</span>{" "}
-          {patient.records.length}
-        </p>
+    <li className="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <strong>{patient.name}</strong> — {patient.age} tuổi — {patient.gender}{" "}
+        |<span className="ms-1">Phone: {patient.phone}</span> |
+        <span className="ms-1">Address: {patient.address}</span>
       </div>
-    </div>
+
+      <div className="d-flex align-items-center gap-2 ms-3">
+        <button
+          className="btn btn-warning btn-sm"
+          onClick={() => onEdit(index)}
+        >
+          Edit
+        </button>
+
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={() => onDelete(index)}
+        >
+          Delete
+        </button>
+      </div>
+    </li>
   );
 }

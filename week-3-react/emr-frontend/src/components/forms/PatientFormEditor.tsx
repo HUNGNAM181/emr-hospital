@@ -112,9 +112,11 @@ export function PatientFormEditor({
         onChange={handleChange}
       />
 
-      <Button type="submit">
-        {mode === "edit" ? "Lưu thay đổi" : "Thêm bệnh nhân"}
-      </Button>
+      <div className="text-end mt-3">
+        <Button type="submit">
+          {mode === "edit" ? "Lưu thay đổi" : "Thêm bệnh nhân"}
+        </Button>
+      </div>
     </PatientForm>
   );
 }
