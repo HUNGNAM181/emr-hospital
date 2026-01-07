@@ -1,34 +1,34 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const roboto = Roboto({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-roboto",
 });
 
 export const metadata: Metadata = {
-  title: "Hệ thống quản lý EMR",
+  title: "EMR Hospital - Quản lý Bệnh nhân",
   description:
     "Hệ thống quản lý EMR (Electronic Medical Records) cho bệnh viện thông minh",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${roboto.variable} antialiased`}>
+        <Header />
+
+        <main className="flex-1 container mx-auto px-4">{children}</main>
+
+        <Footer />
       </body>
     </html>
   );
