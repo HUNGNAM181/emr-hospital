@@ -1,32 +1,35 @@
 import React from "react";
 
-interface PropSelectField
+interface SelectFieldProps
   extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   name: string;
   options: { value: string; label: string }[];
+  error?: string;
 }
 
 export default function SelectField({
   label,
   name,
   options,
+  error,
   ...props
-}: PropSelectField) {
+}: SelectFieldProps) {
   return (
-    <div className="mb-2">
-      <label
-        htmlFor={name}
-        className="block mb-1 text-sm font-medium text-gray-700"
-      >
+    <div className="space-y-1">
+      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
         {label}
       </label>
 
       <select
         id={name}
         name={name}
-        className="w-full px-3 py-2 border rounded-md shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         {...props}
+        className={`
+          w-full rounded-md border bg-white px-3 py-2 text-sm shadow-sm
+          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+          ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300"}
+        `}
       >
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>
@@ -34,6 +37,8 @@ export default function SelectField({
           </option>
         ))}
       </select>
+
+      {error && <p className="text-xs text-red-500">{error}</p>}
     </div>
   );
 }

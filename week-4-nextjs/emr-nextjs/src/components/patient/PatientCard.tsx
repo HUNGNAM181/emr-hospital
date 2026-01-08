@@ -1,4 +1,5 @@
 import { NewPatient } from "@/types/newPatient";
+import { User, Phone, MapPin, Pencil, Trash2 } from "lucide-react";
 
 export function PatientCard({
   patient,
@@ -12,26 +13,44 @@ export function PatientCard({
   onDelete: (index: number) => void;
 }) {
   return (
-    <li className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 px-4 py-3">
-      <div className="text-sm">
-        <strong className="font-semibold">{patient.name}</strong> —{" "}
-        {patient.age} tuổi — {patient.gender}
-        <span className="ml-1">| Phone: {patient.phone}</span>
-        <span className="ml-1">| Address: {patient.address}</span>
+    <li className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 py-4 hover:bg-gray-50">
+      <div className="space-y-1 text-sm">
+        <div className="flex items-center gap-2 font-medium text-gray-900">
+          <User className="h-4 w-4 text-gray-500" />
+          <span>{patient.name}</span>
+        </div>
+
+        <div className="text-gray-600">
+          {patient.age} tuổi - {patient.gender}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-gray-500">
+          <div className="flex items-center gap-1">
+            <Phone className="h-4 w-4" />
+            <span>{patient.phone}</span>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <MapPin className="h-4 w-4" />
+            <span>{patient.address}</span>
+          </div>
+        </div>
       </div>
 
-      <div className="flex gap-2 sm:ml-3">
+      <div className="flex shrink-0 gap-2">
         <button
-          className="px-3 py-1 text-sm rounded-md bg-yellow-400 hover:bg-yellow-500 text-black"
           onClick={() => onEdit(index)}
+          className="flex items-center gap-1 rounded-md border px-3 py-1.5 text-sm hover:bg-gray-100"
         >
+          <Pencil className="h-4 w-4" />
           Edit
         </button>
 
         <button
-          className="px-3 py-1 text-sm rounded-md bg-red-600 hover:bg-red-700 text-white"
           onClick={() => onDelete(index)}
+          className="flex items-center gap-1 rounded-md bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-700"
         >
+          <Trash2 className="h-4 w-4" />
           Delete
         </button>
       </div>

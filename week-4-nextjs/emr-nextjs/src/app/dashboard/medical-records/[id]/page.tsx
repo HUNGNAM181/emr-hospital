@@ -57,14 +57,12 @@ export default function MedicalRecordDetailPage({
   return (
     <div className="space-y-8">
       <h1 className="text-2xl font-bold">Chi tiết hồ sơ bệnh án</h1>
-
-      {/* ===== THÔNG TIN BỆNH NHÂN ===== */}
       <div className="rounded-xl border bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold">Thông tin bệnh nhân</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-gray-500">Họ tên:</span>{" "}
+            <span className="text-gray-500">Họ tên: </span>
             <span className="font-medium">{patient.name}</span>
           </div>
           <div>
@@ -79,7 +77,6 @@ export default function MedicalRecordDetailPage({
         </div>
       </div>
 
-      {/* ===== HỒ SƠ BỆNH ÁN ===== */}
       <div className="rounded-xl border bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold">Lịch sử khám bệnh</h2>
 
@@ -89,7 +86,6 @@ export default function MedicalRecordDetailPage({
           <ul className="space-y-4">
             {patient.records.map((record) => (
               <li key={record.id} className="rounded-lg border bg-gray-50 p-4">
-                {/* Header */}
                 <div className="flex justify-between mb-2 text-sm">
                   <span className="font-medium">
                     Ngày khám: {record.date.toLocaleDateString("vi-VN")}
@@ -99,13 +95,11 @@ export default function MedicalRecordDetailPage({
                   </span>
                 </div>
 
-                {/* Diagnosis */}
                 <p className="text-sm mb-2">
-                  <span className="font-medium">Chẩn đoán:</span>{" "}
+                  <span className="font-medium">Chẩn đoán:</span>
                   {record.diagnosis}
                 </p>
 
-                {/* Prescriptions */}
                 <div className="text-sm">
                   <span className="font-medium">Đơn thuốc:</span>
                   <ul className="mt-2 list-disc list-inside space-y-1">

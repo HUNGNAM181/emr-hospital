@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { NewPatient } from "@/types/newPatient";
 import { PatientCard } from "./PatientCard";
 
@@ -14,37 +13,34 @@ export function NewPatientList({
   onEdit,
   onDelete,
 }: NewPatientListProps) {
-  const [showList, setShowList] = useState<boolean>(true);
-
   return (
-    <div className="mt-4 text-center">
-      <h4 className="text-lg font-semibold mb-2">Danh sách bệnh nhân</h4>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Danh sách bệnh nhân</h2>
 
-      <button
-        className={`px-3 py-2 rounded-md text-white mb-3 ${
-          showList
-            ? "bg-red-600 hover:bg-red-700"
-            : "bg-blue-600 hover:bg-blue-700"
-        }`}
-        onClick={() => setShowList((prev) => !prev)}
-      >
-        {showList ? "Ẩn danh sách bệnh nhân" : "Hiện danh sách bệnh nhân"}
-      </button>
+        <span className="text-sm text-gray-500">
+          {patients.length} bệnh nhân
+        </span>
+      </div>
 
-      {showList && (
-        <div className="mx-auto max-w-xl">
-          <ul className="divide-y rounded-lg border bg-white shadow-sm">
-            {patients.map((p, i) => (
-              <PatientCard
-                key={i}
-                patient={p}
-                index={i}
-                onEdit={onEdit}
-                onDelete={onDelete}
-              />
-            ))}
-          </ul>
+      {patients.length === 0 && (
+        <div className="rounded-lg border border-dashed p-8 text-center text-gray-500">
+          Chưa có bệnh nhân nào
         </div>
+      )}
+
+      {patients.length > 0 && (
+        <ul className="divide-y rounded-lg border bg-white shadow-sm">
+          {patients.map((p, i) => (
+            <PatientCard
+              key={i}
+              patient={p}
+              index={i}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+          ))}
+        </ul>
       )}
     </div>
   );

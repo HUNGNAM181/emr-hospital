@@ -1,9 +1,9 @@
-import PatientListTEST from "@/components/patient/PatientListTEST";
+import PatientList from "@/components/patient/PatientList";
 
 export default function PatientsPage() {
   return (
     <div>
-      <PatientListTEST />
+      <PatientList />
     </div>
   );
 }

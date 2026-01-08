@@ -7,7 +7,7 @@ interface PatientFormProps {
 
 export function PatientForm({ children, onSubmit }: PatientFormProps) {
   return (
-    <form onSubmit={onSubmit} className="mb-3 space-y-2" noValidate>
+    <form onSubmit={onSubmit} className="mb-3 space-y-4" noValidate>
       {children}
     </form>
   );

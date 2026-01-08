@@ -1,58 +1,121 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Patient } from "@/types/patient";
+import { useState } from "react";
+import { NewPatient } from "@/types/newPatient";
 
-export function PatientList() {
-  const [patients, setPatients] = useState<Patient[]>([]);
-  const [showList, setShowList] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
+import { PatientFormEditor } from "@/components/forms/PatientFormEditor";
+import { NewPatientList } from "@/components/patient/NewPatientList";
+import { Modal } from "@/components/modals/Modal";
+import { DeleteModal } from "@/components/modals/DeleteModal";
+import { Toast } from "@/components/Toast/Toast";
 
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch("/patients.json");
-        if (!res.ok) throw new Error("Failed fetch");
-        const data = (await res.json()) as Patient[];
-        setPatients(data);
-      } catch (err) {
-        setErr((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPatients();
-  }, []);
+export default function PatientList() {
+  const [patients, setPatients] = useState<NewPatient[]>([]);
+  const [showCreate, setShowCreate] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
+
+  type ToastType = "success" | "info" | "warning" | "danger";
+  interface ToastState {
+    message: string;
+    type: ToastType;
+  }
+
+  const [toast, setToast] = useState<ToastState | null>(null);
+
+  const showToast = (message: string, type: ToastType) =>
+    setToast({ message, type });
+
+  const handleAdd = (p: NewPatient) => {
+    setPatients((prev) => [...prev, p]);
+    showToast("Thêm bệnh nhân thành công!", "success");
+  };
+
+  const handleEditSave = (updated: NewPatient) => {
+    setPatients((prev) =>
+      prev.map((p, i) => (i === editingIndex ? updated : p))
+    );
+    setEditingIndex(null);
+    showToast("Cập nhật bệnh nhân thành công!", "info");
+  };
+
+  const handleDeleteRequest = (index: number) => setDeletingIndex(index);
+
+  const handleConfirmDelete = () => {
+    if (deletingIndex === null) return;
+    setPatients((prev) => prev.filter((_, i) => i !== deletingIndex));
+    if (editingIndex === deletingIndex) setEditingIndex(null);
+    setDeletingIndex(null);
+    showToast("Xoá bệnh nhân thành công!", "danger");
+  };
 
   return (
-    <div className="mt-4 text-center">
-      <h4 className="text-lg font-semibold mb-2">Danh sách bệnh nhân</h4>
-
-      <button
-        className="px-3 py-2 rounded-md bg-amber-400 hover:bg-amber-500 text-black mb-3"
-        onClick={() => setShowList((prev) => !prev)}
-      >
-        {showList ? "Hide List" : "Show List"}
-      </button>
-
-      {loading && <p>Loading...</p>}
-      {err && <p className="text-red-600">Lỗi: {err}</p>}
-
-      {!loading && !err && showList && (
-        <div className="mx-auto max-w-xl">
-          <ul className="divide-y rounded-lg border bg-white shadow-sm">
-            {patients.map((p) => (
-              <li key={p.id} className="px-4 py-3 text-sm">
-                <strong>{p.name}</strong> — {p.age} tuổi — {p.gender}
-                <span className="ml-1">| Trạng thái: {p.status}</span>
-                <span className="ml-1">
-                  | Số hồ sơ: {p.records?.length ?? 0}
-                </span>
-              </li>
-            ))}
-          </ul>
+    <div className="space-y-6">
+      {/* ===== HEADER ===== */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Quản lý bệnh nhân</h1>
+          <p className="text-sm text-gray-500">
+            Danh sách và quản lý thông tin bệnh nhân
+          </p>
         </div>
+
+        <button
+          className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white"
+          onClick={() => setShowCreate(true)}
+        >
+          + Thêm bệnh nhân
+        </button>
+      </div>
+
+      {/* ===== CARD DANH SÁCH ===== */}
+      <div className="rounded-xl border bg-white p-6 shadow-sm">
+        <NewPatientList
+          patients={patients}
+          onEdit={(index) => setEditingIndex(index)}
+          onDelete={handleDeleteRequest}
+        />
+      </div>
+
+      {showCreate && (
+        <Modal title="Thêm bệnh nhân mới" onClose={() => setShowCreate(false)}>
+          <PatientFormEditor
+            mode="create"
+            onSubmit={(p) => {
+              handleAdd(p);
+              setShowCreate(false);
+            }}
+          />
+        </Modal>
+      )}
+
+      {editingIndex !== null && (
+        <Modal
+          title="Chỉnh sửa bệnh nhân"
+          onClose={() => setEditingIndex(null)}
+        >
+          <PatientFormEditor
+            mode="edit"
+            initial={patients[editingIndex]}
+            onSubmit={handleEditSave}
+          />
+        </Modal>
+      )}
+
+      {deletingIndex !== null && (
+        <DeleteModal
+          title="Xoá bệnh nhân"
+          message={`Bạn có chắc muốn xoá bệnh nhân "${patients[deletingIndex].name}"?`}
+          onCancel={() => setDeletingIndex(null)}
+          onConfirm={handleConfirmDelete}
+        />
+      )}
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
       )}
     </div>
   );
