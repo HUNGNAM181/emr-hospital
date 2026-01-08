@@ -28,7 +28,7 @@ export function NewPatientList({
         }`}
         onClick={() => setShowList((prev) => !prev)}
       >
-        {showList ? "Hide List" : "Show List"}
+        {showList ? "Ẩn danh sách bệnh nhân" : "Hiện danh sách bệnh nhân"}
       </button>
 
       {showList && (

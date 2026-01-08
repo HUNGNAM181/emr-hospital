@@ -115,7 +115,7 @@ export default function Header() {
         <Navbar />
       </div>
 
-      <div className="h-16" />
+      {/* <div className="h-16" /> */}
     </>
   );
 }

@@ -29,7 +29,7 @@ export function Toast({
       : "bg-blue-600";
 
   return (
-    <div className="fixed top-3 right-3 z-[1055]">
+    <div className="fixed bottom-3 right-3 z-[1055]">
       <div
         className={`rounded-lg shadow-lg px-4 py-3 text-white transition-opacity ${bg}`}
       >

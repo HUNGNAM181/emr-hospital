@@ -26,8 +26,8 @@ export default function DashboardLayout({
 
         <nav className="space-y-1">
           <Link
-            href="/dashboard"
-            className={menuItem("/dashboard", "Dashboard")}
+            href="/dashboard/dashboard"
+            className={menuItem("/dashboard/dashboard", "Dashboard")}
           >
             Dashboard
           </Link>

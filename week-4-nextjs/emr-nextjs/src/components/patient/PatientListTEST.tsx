@@ -57,7 +57,7 @@ export default function PatientListTEST() {
         className="mt-2 px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white"
         onClick={() => setShowCreate(true)}
       >
-        Add Patient
+        Thêm bệnh nhân
       </button>
 
       <NewPatientList
