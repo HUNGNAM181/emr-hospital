@@ -78,7 +78,7 @@ export default function Navbar() {
               className="bg-orange-500 hover:bg-orange-600 text-white font-semibold
                          px-5 h-10 rounded-full flex items-center"
             >
-              Đăng ký
+              TEST
             </Link>
 
             {/* Đăng nhập */}
@@ -87,7 +87,7 @@ export default function Navbar() {
               className="border border-white/80 text-white px-5 h-10 rounded-full
                          flex items-center hover:bg-[#196fa8]/70"
             >
-              Đăng nhập
+              TEST
             </Link>
           </div>
         </div>

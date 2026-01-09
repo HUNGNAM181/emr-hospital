@@ -2,13 +2,15 @@ import { Patient } from "@/types/patient";
 import { Role } from "@/types/role";
 import { Status } from "@/types/status";
 
-export default function MedicalRecordDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function MedicalRecordDetailPage({ params }: PageProps) {
+  const { id } = await params;
+
   const patient: Patient = {
-    id: params.id,
+    id: id,
     name: "Nguyễn Văn Anh",
     age: 22,
     gender: "male",
@@ -17,7 +19,7 @@ export default function MedicalRecordDetailPage({
     records: [
       {
         id: "mr1",
-        patientId: params.id,
+        patientId: id,
         date: new Date("2026-01-05"),
         diagnosis: "Tăng huyết áp",
         doctorId: "TS.Nam",
@@ -38,7 +40,7 @@ export default function MedicalRecordDetailPage({
       },
       {
         id: "mr2",
-        patientId: params.id,
+        patientId: id,
         date: new Date("2026-01-15"),
         diagnosis: "Đau đầu kéo dài",
         doctorId: "TS.Tân",
