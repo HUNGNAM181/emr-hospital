@@ -72,7 +72,6 @@ export default function Navbar() {
               </button>
             </form>
 
-            {/* Đăng ký */}
             <Link
               href="/register"
               className="bg-orange-500 hover:bg-orange-600 text-white font-semibold
@@ -81,7 +80,6 @@ export default function Navbar() {
               TEST
             </Link>
 
-            {/* Đăng nhập */}
             <Link
               href="/login"
               className="border border-white/80 text-white px-5 h-10 rounded-full

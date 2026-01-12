@@ -1,80 +1,51 @@
-import { Patient } from "@/types/patient";
-import { Role } from "@/types/role";
-import { Status } from "@/types/status";
+import { Metadata } from "next";
+import { getPatientById } from "@/data/patient.service";
 
-interface PageProps {
-  params: Promise<{ id: string }>;
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string } | Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await Promise.resolve(params);
+  const patient = getPatientById(id);
+
+  return {
+    title: patient ? `Hồ sơ bệnh án - ${patient.name}` : "Hồ sơ bệnh án",
+  };
 }
 
-export default async function MedicalRecordDetailPage({ params }: PageProps) {
-  const { id } = await params;
+export default async function MedicalRecordDetailPage({
+  params,
+}: {
+  params: { id: string } | Promise<{ id: string }>;
+}) {
+  const { id } = await Promise.resolve(params);
+  const patient = getPatientById(id);
 
-  const patient: Patient = {
-    id: id,
-    name: "Nguyễn Văn Anh",
-    age: 22,
-    gender: "male",
-    role: Role.Patient,
-    status: Status.Active,
-    records: [
-      {
-        id: "mr1",
-        patientId: id,
-        date: new Date("2026-01-05"),
-        diagnosis: "Tăng huyết áp",
-        doctorId: "TS.Nam",
-        prescriptions: [
-          {
-            id: "pr1",
-            medicalRecordId: "mr1",
-            medicine: "Amlodipine",
-            dosage: "5mg / ngày",
-          },
-          {
-            id: "pr2",
-            medicalRecordId: "mr1",
-            medicine: "Losartan",
-            dosage: "50mg / ngày",
-          },
-        ],
-      },
-      {
-        id: "mr2",
-        patientId: id,
-        date: new Date("2026-01-15"),
-        diagnosis: "Đau đầu kéo dài",
-        doctorId: "TS.Tân",
-        prescriptions: [
-          {
-            id: "pr3",
-            medicalRecordId: "mr2",
-            medicine: "Paracetamol",
-            dosage: "500mg khi đau",
-          },
-        ],
-      },
-    ],
-  };
+  if (!patient) {
+    return <div className="p-6 text-red-500">Không tìm thấy bệnh nhân</div>;
+  }
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Chi tiết hồ sơ bệnh án</h1>
+    <div className="space-y-8 p-6">
+      <h1 className="text-2xl font-bold">Hồ sơ bệnh án</h1>
+
+      {/* ===== Thông tin bệnh nhân ===== */}
       <div className="rounded-xl border bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold">Thông tin bệnh nhân</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-gray-500">Họ tên: </span>
-            <span className="font-medium">{patient.name}</span>
+            <b>Họ tên:</b> {patient.name}
           </div>
           <div>
-            <span className="text-gray-500">Tuổi:</span> {patient.age}
+            <b>Tuổi:</b> {patient.age}
           </div>
           <div>
-            <span className="text-gray-500">Giới tính:</span> {patient.gender}
+            <b>Giới tính:</b> {patient.gender}
           </div>
           <div>
-            <span className="text-gray-500">Trạng thái:</span> {patient.status}
+            <b>Trạng thái:</b> {patient.status}
           </div>
         </div>
       </div>
@@ -93,17 +64,16 @@ export default async function MedicalRecordDetailPage({ params }: PageProps) {
                     Ngày khám: {record.date.toLocaleDateString("vi-VN")}
                   </span>
                   <span className="text-gray-500">
-                    BS ID: {record.doctorId}
+                    Bác sĩ: {record.doctorId}
                   </span>
                 </div>
 
                 <p className="text-sm mb-2">
-                  <span className="font-medium">Chẩn đoán:</span>
-                  {record.diagnosis}
+                  <b>Chẩn đoán:</b> {record.diagnosis}
                 </p>
 
                 <div className="text-sm">
-                  <span className="font-medium">Đơn thuốc:</span>
+                  <b>Đơn thuốc:</b>
                   <ul className="mt-2 list-disc list-inside space-y-1">
                     {record.prescriptions.map((p) => (
                       <li key={p.id}>

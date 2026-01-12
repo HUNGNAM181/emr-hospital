@@ -10,12 +10,14 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({ email, password });
+    //  GIẢ LẬP LOGIN
+    document.cookie = "token=demo-token; path=/";
+    // redirect vào dashboard
+    window.location.href = "/dashboard";
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 px-4">
-      {/* Logo + System name */}
       <div className="text-center mb-8">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-white shadow">
           <Image
@@ -83,7 +85,6 @@ export default function LoginPage() {
         </p>
       </div>
 
-      {/* Footer text */}
       <p className="text-sm text-gray-500 mt-6">
         Need help? Contact your system administrator
       </p>

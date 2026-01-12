@@ -23,6 +23,7 @@ export default function Header() {
                   width={200} // kích thước gốc tham chiếu
                   height={200}
                   className="h-24 w-auto max-h-24"
+                  priority
                 />
               </Link>
             </div>

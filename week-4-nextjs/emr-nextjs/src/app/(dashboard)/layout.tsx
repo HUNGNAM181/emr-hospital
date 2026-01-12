@@ -24,32 +24,31 @@ export default function DashboardLayout({
      }`;
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
       <Header />
 
-      <div className="flex flex-1">
-        <aside className="w-60 bg-gray-100 border-r p-4 space-y-2">
+      <div className="h-screen flex overflow-hidden">
+        {/* Sidebar */}
+        <aside className="w-60 bg-gray-100 border-r p-4 overflow-y-auto">
           <h2 className="text-lg font-semibold mb-3">Admin Panel</h2>
 
           <nav className="space-y-1">
             <Link href="/dashboard" className={menuItem("/dashboard")}>
               Dashboard
             </Link>
-
             <Link href="/patients" className={menuItem("/patients")}>
               Patients
             </Link>
-
             <Link href="/doctors" className={menuItem("/doctors")}>
               Doctors
             </Link>
           </nav>
         </aside>
 
-        <main className="flex-1 p-6 bg-white">{children}</main>
+        <main className="flex-1 p-6 bg-white overflow-y-auto">{children}</main>
       </div>
 
       <Footer />
-    </div>
+    </>
   );
 }

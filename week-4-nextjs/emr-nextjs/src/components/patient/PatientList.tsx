@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { NewPatient } from "@/types/newPatient";
 
 import { PatientFormEditor } from "@/components/forms/PatientFormEditor";
@@ -21,6 +22,16 @@ export default function PatientList() {
   }
 
   const [toast, setToast] = useState<ToastState | null>(null);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      const res = await fetch("/api/patients");
+      const data = await res.json();
+      setPatients(data);
+    };
+
+    fetchPatients();
+  }, []);
 
   const showToast = (message: string, type: ToastType) =>
     setToast({ message, type });
@@ -67,7 +78,6 @@ export default function PatientList() {
         </button>
       </div>
 
-      {/* ===== CARD DANH SÁCH ===== */}
       <div className="rounded-xl border bg-white p-6 shadow-sm">
         <NewPatientList
           patients={patients}
