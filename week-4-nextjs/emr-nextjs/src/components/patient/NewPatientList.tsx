@@ -1,9 +1,10 @@
 "use client";
-import { NewPatient } from "@/types/newPatient";
+
+import { PatientListItem } from "@/types/patient-list-item";
 import { PatientCard } from "./PatientCard";
 
 interface NewPatientListProps {
-  patients: NewPatient[];
+  patients: PatientListItem[];
   onEdit: (index: number) => void;
   onDelete: (index: number) => void;
 }

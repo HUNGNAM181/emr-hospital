@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { NewPatient } from "@/types/newPatient";
+import { PatientListItem } from "@/types/patient-list-item";
 import { User, Phone, MapPin, Pencil, Trash2 } from "lucide-react";
 
 export function PatientCard({
@@ -10,7 +10,7 @@ export function PatientCard({
   onEdit,
   onDelete,
 }: {
-  patient: NewPatient;
+  patient: PatientListItem;
   index: number;
   onEdit: (index: number) => void;
   onDelete: (index: number) => void;
