@@ -5,8 +5,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-100 border-t mt-10 bg-gray-200">
       <div className="max-w-7xl mx-auto px-8 py-10 ">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
-          {/* Cột 1 */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 items-start">
           <div className="pr-6">
             <div className="flex items-center gap-2 mb-3">
               <Image
@@ -29,8 +28,7 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Cột 2 */}
-          <div className="px-6">
+          <div className="md:px-6">
             <h3 className="text-gray-800 font-semibold mb-3">
               Thông tin hệ thống
             </h3>
@@ -58,8 +56,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Cột 3 */}
-          <div className="pl-6">
+          <div className="md:ml-6">
             <h3 className="text-gray-800 font-semibold mb-3">
               Khu vực chức năng
             </h3>

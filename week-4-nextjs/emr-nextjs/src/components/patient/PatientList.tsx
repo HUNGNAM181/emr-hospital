@@ -61,8 +61,13 @@ export default function PatientList() {
 
   return (
     <div className="space-y-6">
-      {/* ===== HEADER ===== */}
-      <div className="flex items-center justify-between">
+      <div
+        className="
+    flex flex-col gap-3
+    items-start
+    md:flex-row md:items-center md:justify-between
+  "
+      >
         <div>
           <h1 className="text-2xl font-bold">Quản lý bệnh nhân</h1>
           <p className="text-sm text-gray-500">
@@ -71,7 +76,13 @@ export default function PatientList() {
         </div>
 
         <button
-          className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white"
+          className="
+      inline-flex items-center
+      px-4 py-2
+      rounded-md
+      bg-blue-600 hover:bg-blue-700
+      text-white text-sm font-medium
+    "
           onClick={() => setShowCreate(true)}
         >
           + Thêm bệnh nhân

@@ -30,7 +30,6 @@ export default async function MedicalRecordDetailPage({
     <div className="space-y-8 p-6">
       <h1 className="text-2xl font-bold">Hồ sơ bệnh án</h1>
 
-      {/* ===== Thông tin bệnh nhân ===== */}
       <div className="rounded-xl border bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold">Thông tin bệnh nhân</h2>
 

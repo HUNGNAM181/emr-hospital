@@ -5,7 +5,7 @@ import Navbar from "./NavBar";
 export default function Header() {
   return (
     <>
-      <header className=" bg-white ">
+      <header className=" bg-white hidden md:block ">
         <div className="border-b border-gray-300">
           <div className="h-10 flex items-center max-w-7xl px-8 mx-auto ">
             <span className="text-sm text-gray-400">
@@ -115,8 +115,6 @@ export default function Header() {
       <div className="sticky top-0 z-50">
         <Navbar />
       </div>
-
-      {/* <div className="h-16" /> */}
     </>
   );
 }

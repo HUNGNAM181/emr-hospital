@@ -11,32 +11,63 @@ export function Modal({
   children: React.ReactNode;
   onClose: () => void;
 }) {
-  if (typeof window === "undefined") return null;
-
   return createPortal(
     <>
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[1000]"
+        className="fixed inset-0 z-[1000]
+                   bg-black/40 backdrop-blur-sm
+                   transition-opacity animate-fadeIn"
         onClick={onClose}
       />
 
-      {/* Modal */}
-      <div className="fixed inset-0 z-[1001] flex items-center justify-center">
-        <div className="w-full max-w-lg bg-white rounded-xl shadow-lg">
-          {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50 rounded-sm">
-            <h5 className="text-lg font-semibold">{title}</h5>
+      <div
+        className="fixed inset-0 z-[1001]
+                   flex items-end md:items-center
+                   justify-center"
+      >
+        <div
+          className="
+            w-full md:max-w-lg
+            bg-white
+            rounded-t-2xl md:rounded-2xl
+            shadow-xl
+            mx-0 md:mx-4
+            max-h-[90vh]
+            flex flex-col
+            animate-slideUp md:animate-scaleIn
+          "
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div
+            className="flex items-center justify-between
+                       px-4 py-3
+                       border-b
+                       bg-gray-50
+                       rounded-t-2xl"
+          >
+            <h5 className="text-base md:text-lg font-semibold">{title}</h5>
 
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100"
+              className="w-8 h-8
+                         flex items-center justify-center
+                         rounded-full
+                         hover:bg-gray-200
+                         transition
+                         text-gray-600 text-lg"
+              aria-label="Close modal"
             >
               ✕
             </button>
           </div>
 
-          {/* Content */}
-          <div className="px-4 py-4">{children}</div>
+          <div
+            className="px-4 py-4
+                       overflow-y-auto
+                       text-sm md:text-base"
+          >
+            {children}
+          </div>
         </div>
       </div>
     </>,

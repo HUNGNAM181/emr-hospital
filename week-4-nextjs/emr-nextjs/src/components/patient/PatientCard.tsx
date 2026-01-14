@@ -17,7 +17,7 @@ export function PatientCard({
 }) {
   return (
     <li>
-      <Link href={`/medical-records/${patient.id}`} className="block">
+      <Link href={`/dashboard/medical-records/${patient.id}`} className="block">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 py-4 hover:bg-gray-50 cursor-pointer">
           <div className="space-y-1 text-sm">
             <div className="flex items-center gap-2 font-medium text-gray-900">
