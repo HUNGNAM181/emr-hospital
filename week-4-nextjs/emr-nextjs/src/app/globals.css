@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f3f4f6bf;
+  --foreground: #171717;
+}
+
+/* Dùng Roboto làm font mặc định */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-sans: var(--font-roboto), sans-serif;
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+
+  /* KHÔNG ép Arial nữa */
+  font-family: var(--font-roboto), sans-serif;
+}
