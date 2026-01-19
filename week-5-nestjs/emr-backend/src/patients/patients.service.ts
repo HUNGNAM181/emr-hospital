@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { Patient } from './patient.interface';
+import { PatientNotFoundException } from './exceptions/patient-not-found.exception';
 
 @Injectable()
 export class PatientsService {
@@ -25,7 +26,7 @@ export class PatientsService {
   findOne(id: string): Patient {
     const patient = this.patients.find((p) => p.id === id);
     if (!patient) {
-      throw new NotFoundException(`Patient with id ${id} not found`);
+      throw new PatientNotFoundException(id);
     }
     return patient;
   }
