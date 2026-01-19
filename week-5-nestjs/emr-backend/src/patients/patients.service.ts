@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
-import { Patient } from './patient.interface';
+import { Patient } from './entities/patient.entity';
 import { PatientNotFoundException } from './exceptions/patient-not-found.exception';
 
 @Injectable()
