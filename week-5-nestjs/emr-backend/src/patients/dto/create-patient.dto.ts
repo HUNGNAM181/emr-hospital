@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsOptional, IsPhoneNumber } from 'class-validator';
+import { IsString, IsInt, IsOptional, IsIn, Matches } from 'class-validator';
 
 export class CreatePatientDto {
   @IsString()
@@ -7,10 +7,10 @@ export class CreatePatientDto {
   @IsInt()
   age: number;
 
-  @IsString()
-  gender: string;
+  @IsIn(['male', 'female'])
+  gender: 'male' | 'female';
 
-  @IsPhoneNumber('VN')
+  @Matches(/^[0-9]{9,11}$/)
   phone: string;
 
   @IsOptional()
