@@ -1,8 +1,8 @@
 export interface Patient {
-  id: number;
+  id: string; // UUID
   name: string;
   age: number;
-  gender: string;
+  gender: 'male' | 'female';
   phone: string;
   address?: string;
 }

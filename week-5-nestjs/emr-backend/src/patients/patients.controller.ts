@@ -5,7 +5,8 @@ import {
   Get,
   Body,
   Param,
-  ParseIntPipe,
+  ParseUUIDPipe,
+  Put,
 } from '@nestjs/common';
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
@@ -25,8 +26,16 @@ export class PatientsController {
     return this.patientsService.findAll();
   }
 
-  @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdatePatientDto) {
+  @Get(':id')
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.patientsService.findOne(id);
+  }
+
+  @Put(':id')
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdatePatientDto,
+  ) {
     return this.patientsService.update(id, dto);
   }
 }
