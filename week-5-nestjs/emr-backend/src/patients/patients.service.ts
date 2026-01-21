@@ -1,39 +1,55 @@
 import { Injectable } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
-import { Patient } from './entities/patient.entity';
+import { Patient, PatientDocument } from './schemas/patients.schema';
 import { PatientNotFoundException } from './exceptions/patient-not-found.exception';
 
 @Injectable()
 export class PatientsService {
-  private patients: Patient[] = [];
+  constructor(
+    @InjectModel(Patient.name)
+    private readonly patientModel: Model<PatientDocument>,
+  ) {}
 
-  create(dto: CreatePatientDto): Patient {
-    const patient: Patient = {
-      id: uuidv4(),
-      ...dto,
-    };
-
-    this.patients.push(patient);
-    return patient;
+  async create(dto: CreatePatientDto): Promise<Patient> {
+    return this.patientModel.create(dto);
   }
 
-  findAll(): Patient[] {
-    return this.patients;
+  async findAll(): Promise<Patient[]> {
+    return this.patientModel.find();
   }
 
-  findOne(id: string): Patient {
-    const patient = this.patients.find((p) => p.id === id);
+  async findOne(id: string): Promise<Patient> {
+    const patient = await this.patientModel.findById(id);
     if (!patient) {
       throw new PatientNotFoundException(id);
     }
     return patient;
   }
 
-  update(id: string, dto: UpdatePatientDto): Patient {
-    const patient = this.findOne(id);
-    Object.assign(patient, dto);
+  async update(id: string, dto: UpdatePatientDto): Promise<Patient> {
+    const patient = await this.patientModel.findByIdAndUpdate(id, dto, {
+      new: true,
+    });
+
+    if (!patient) {
+      throw new PatientNotFoundException(id);
+    }
+
     return patient;
+  }
+
+  async remove(id: string) {
+    const patient = await this.patientModel.findByIdAndDelete(id);
+
+    if (!patient) {
+      throw new PatientNotFoundException(id);
+    }
+
+    return {
+      message: 'Patient deleted successfully',
+    };
   }
 }
