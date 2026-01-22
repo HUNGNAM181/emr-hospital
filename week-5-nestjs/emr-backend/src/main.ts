@@ -1,8 +1,9 @@
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { ConfigService } from '@nestjs/config';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 // Swagger
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -24,6 +25,9 @@ async function bootstrap() {
     origin: 'http://localhost:3000',
     credentials: true,
   });
+
+  const reflector = app.get(Reflector);
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('EMR Backend API')
