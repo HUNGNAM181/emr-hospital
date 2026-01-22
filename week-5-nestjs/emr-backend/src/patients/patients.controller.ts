@@ -17,26 +17,27 @@ export class PatientsController {
 
   @Post()
   async create(@Body() dto: CreatePatientDto) {
-    return this.patientsService.create(dto);
+    const fakeDoctorId = '65a123456789abcdef123456'; // ObjectId hợp lệ
+    return await this.patientsService.create(dto, fakeDoctorId);
   }
 
   @Get()
   async findAll() {
-    return this.patientsService.findAll();
+    return await this.patientsService.findAll();
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.patientsService.findOne(id);
+    return await this.patientsService.findOne(id);
   }
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() dto: UpdatePatientDto) {
-    return this.patientsService.update(id, dto);
+    return await this.patientsService.update(id, dto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return this.patientsService.remove(id);
+    return await this.patientsService.remove(id);
   }
 }

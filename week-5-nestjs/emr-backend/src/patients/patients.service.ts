@@ -13,26 +13,31 @@ export class PatientsService {
     private readonly patientModel: Model<PatientDocument>,
   ) {}
 
-  async create(dto: CreatePatientDto): Promise<Patient> {
-    return this.patientModel.create(dto);
+  async create(dto: CreatePatientDto, doctorId: string): Promise<Patient> {
+    return await this.patientModel.create({
+      ...dto,
+      doctorId,
+    });
   }
 
   async findAll(): Promise<Patient[]> {
-    return this.patientModel.find();
+    return await this.patientModel.find().exec();
   }
 
   async findOne(id: string): Promise<Patient> {
-    const patient = await this.patientModel.findById(id);
+    const patient = await this.patientModel.findById(id).exec();
+
     if (!patient) {
       throw new PatientNotFoundException(id);
     }
+
     return patient;
   }
 
   async update(id: string, dto: UpdatePatientDto): Promise<Patient> {
-    const patient = await this.patientModel.findByIdAndUpdate(id, dto, {
-      new: true,
-    });
+    const patient = await this.patientModel
+      .findByIdAndUpdate(id, dto, { new: true })
+      .exec();
 
     if (!patient) {
       throw new PatientNotFoundException(id);
@@ -42,14 +47,12 @@ export class PatientsService {
   }
 
   async remove(id: string) {
-    const patient = await this.patientModel.findByIdAndDelete(id);
+    const patient = await this.patientModel.findByIdAndDelete(id).exec();
 
     if (!patient) {
       throw new PatientNotFoundException(id);
     }
 
-    return {
-      message: 'Patient deleted successfully',
-    };
+    return { message: 'Patient deleted successfully' };
   }
 }
