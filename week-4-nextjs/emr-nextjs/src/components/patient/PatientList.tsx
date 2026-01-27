@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { NewPatient } from "@/types/newPatient";
-
+import { PatientListItem } from "@/types/patient-list-item";
 import { PatientFormEditor } from "@/components/forms/PatientFormEditor";
 import { NewPatientList } from "@/components/patient/NewPatientList";
 import { Modal } from "@/components/modals/Modal";
@@ -10,7 +10,7 @@ import { DeleteModal } from "@/components/modals/DeleteModal";
 import { Toast } from "@/components/Toast/Toast";
 
 export default function PatientList() {
-  const [patients, setPatients] = useState<NewPatient[]>([]);
+  const [patients, setPatients] = useState<PatientListItem[]>([]);
   const [showCreate, setShowCreate] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
@@ -26,8 +26,14 @@ export default function PatientList() {
   useEffect(() => {
     const fetchPatients = async () => {
       const res = await fetch("/api/patients");
-      const data = await res.json();
-      setPatients(data);
+      const data: NewPatient[] = await res.json();
+
+      const withId: PatientListItem[] = data.map((p, index) => ({
+        id: `server-${index}`,
+        ...p,
+      }));
+
+      setPatients(withId);
     };
 
     fetchPatients();
@@ -37,13 +43,19 @@ export default function PatientList() {
     setToast({ message, type });
 
   const handleAdd = (p: NewPatient) => {
-    setPatients((prev) => [...prev, p]);
+    setPatients((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        ...p,
+      },
+    ]);
     showToast("Thêm bệnh nhân thành công!", "success");
   };
 
   const handleEditSave = (updated: NewPatient) => {
     setPatients((prev) =>
-      prev.map((p, i) => (i === editingIndex ? updated : p))
+      prev.map((p, i) => (i === editingIndex ? { ...p, ...updated } : p))
     );
     setEditingIndex(null);
     showToast("Cập nhật bệnh nhân thành công!", "info");
@@ -61,13 +73,7 @@ export default function PatientList() {
 
   return (
     <div className="space-y-6">
-      <div
-        className="
-    flex flex-col gap-3
-    items-start
-    md:flex-row md:items-center md:justify-between
-  "
-      >
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-2xl font-bold">Quản lý bệnh nhân</h1>
           <p className="text-sm text-gray-500">
@@ -76,13 +82,7 @@ export default function PatientList() {
         </div>
 
         <button
-          className="
-      inline-flex items-center
-      px-4 py-2
-      rounded-md
-      bg-blue-600 hover:bg-blue-700
-      text-white text-sm font-medium
-    "
+          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
           onClick={() => setShowCreate(true)}
         >
           + Thêm bệnh nhân
