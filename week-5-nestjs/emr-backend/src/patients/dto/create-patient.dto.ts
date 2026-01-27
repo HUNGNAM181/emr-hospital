@@ -5,6 +5,7 @@ import {
   IsIn,
   Matches,
   IsNotEmpty,
+  IsMongoId,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -31,4 +32,9 @@ export class CreatePatientDto {
   @IsOptional()
   @IsString({ message: 'Địa chỉ phải là chuỗi' })
   address?: string;
+
+  // CHỈ ADMIN MỚI DÙNG
+  @IsOptional()
+  @IsMongoId({ message: 'doctorId phải là MongoDB ObjectId hợp lệ' })
+  doctorId?: string;
 }

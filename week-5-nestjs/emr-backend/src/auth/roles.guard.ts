@@ -8,16 +8,13 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    // 1. Lấy roles yêu cầu từ metadata
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
-    // Nếu route không yêu cầu role → cho qua
     if (!requiredRoles) return true;
 
-    // 2. Lấy user từ request (AuthGuard đã set)
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 

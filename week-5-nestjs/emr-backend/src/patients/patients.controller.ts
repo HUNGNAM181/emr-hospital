@@ -10,6 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import type { Request } from 'express';
+
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
@@ -24,39 +25,47 @@ import { Role } from '../auth/roles.enum';
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}
 
-  // ADMIN: tạo patient
+  // ================= CREATE =================
+  // ADMIN + DOCTOR
   @Post()
-  @Roles(Role.ADMIN)
-  async create(@Body() dto: CreatePatientDto, @Req() req: Request) {
-    const doctorId = (req.user as any).userId;
-    return await this.patientsService.create(dto, doctorId);
+  @Roles(Role.ADMIN, Role.DOCTOR)
+  create(@Body() dto: CreatePatientDto, @Req() req: Request) {
+    return this.patientsService.create(dto, req.user as any);
   }
 
-  // ADMIN + DOCTOR + NURSE: xem danh sách
+  // ================= FIND ALL =================
+  // ADMIN + DOCTOR + NURSE
   @Get()
   @Roles(Role.ADMIN, Role.DOCTOR, Role.NURSE)
-  async findAll() {
-    return await this.patientsService.findAll();
+  findAll(@Req() req: Request) {
+    return this.patientsService.findAll(req.user as any);
   }
 
-  // ADMIN + DOCTOR + NURSE: xem chi tiết
+  // ================= FIND ONE =================
+  // ADMIN + DOCTOR + NURSE
   @Get(':id')
   @Roles(Role.ADMIN, Role.DOCTOR, Role.NURSE)
-  async findOne(@Param('id') id: string) {
-    return await this.patientsService.findOne(id);
+  findOne(@Param('id') id: string, @Req() req: Request) {
+    return this.patientsService.findOne(id, req.user as any);
   }
 
-  // ADMIN: cập nhật
+  // ================= UPDATE =================
+  // ADMIN + DOCTOR
   @Put(':id')
-  @Roles(Role.ADMIN)
-  async update(@Param('id') id: string, @Body() dto: UpdatePatientDto) {
-    return await this.patientsService.update(id, dto);
+  @Roles(Role.ADMIN, Role.DOCTOR)
+  update(
+    @Param('id') id: string,
+    @Body() dto: UpdatePatientDto,
+    @Req() req: Request,
+  ) {
+    return this.patientsService.update(id, dto, req.user as any);
   }
 
-  // ADMIN: xóa
+  // ================= DELETE =================
+  // ADMIN + DOCTOR
   @Delete(':id')
-  @Roles(Role.ADMIN)
-  async remove(@Param('id') id: string) {
-    return await this.patientsService.remove(id);
+  @Roles(Role.ADMIN, Role.DOCTOR)
+  remove(@Param('id') id: string, @Req() req: Request) {
+    return this.patientsService.remove(id, req.user as any);
   }
 }
