@@ -6,11 +6,22 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+
+    //RATE LIMITING (đúng version mới)
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60, // 60 giây
+          limit: 20, // 30 request / IP
+        },
+      ],
     }),
 
     MongooseModule.forRootAsync({
