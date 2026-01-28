@@ -3,16 +3,24 @@
 import { usePathname, useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { logout } = useAuth();
 
   const [keyword, setKeyword] = useState("");
   const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  const handleLogout = () => {
+    setShowMobileMenu(false);
+    setShowMobileSearch(false);
+
+    logout();
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,9 +39,7 @@ export default function Navbar() {
   };
 
   const title =
-    Object.entries(pageTitleMap).find(
-      ([key]) => pathname === key || pathname.startsWith(`${key}/`)
-    )?.[1] ?? "Detail";
+    Object.entries(pageTitleMap).find(([key]) => pathname === key || pathname.startsWith(`${key}/`))?.[1] ?? "Detail";
 
   return (
     <nav className="bg-[#2196d9] shadow-sm top-0 z-50">
@@ -46,6 +52,7 @@ export default function Navbar() {
           </div>
 
           <div className="ml-auto flex items-center gap-3">
+            {/* giữ nguyên */}
             <button
               type="button"
               onClick={() => {
@@ -58,6 +65,7 @@ export default function Navbar() {
               <Search size={18} className="text-white" />
             </button>
 
+            {/* giữ nguyên */}
             <form
               onSubmit={handleSearch}
               className="hidden md:flex items-center bg-white/95 px-4 h-9 rounded-full
@@ -94,10 +102,7 @@ export default function Navbar() {
               </button>
 
               <div className="hidden md:flex items-center gap-2">
-                <div
-                  className="w-8 h-8 rounded-full overflow-hidden
-                                border border-white/60 bg-white"
-                >
+                <div className="w-8 h-8 rounded-full overflow-hidden border border-white/60 bg-white">
                   <Image
                     src="/img/patients/default.jpg"
                     alt="Admin avatar"
@@ -111,36 +116,29 @@ export default function Navbar() {
               </div>
 
               {showMobileMenu && (
-                <div
-                  className="absolute right-0 top-full mt-2 w-40
-                             bg-white rounded-lg shadow-lg border
-                             md:hidden z-50"
-                >
-                  <div
-                    className="px-4 py-2 text-sm font-medium
-                                  text-gray-800 border-b"
-                  >
-                    Admin
-                  </div>
-                  <Link
-                    href="/login"
-                    className="block px-4 py-2 text-sm text-red-600
+                <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-lg shadow-lg border md:hidden z-50">
+                  <div className="px-4 py-2 text-sm font-medium text-gray-800 border-b">Admin</div>
+
+                  {/*  MOBILE LOGOUT */}
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-red-600
                                hover:bg-gray-100 rounded-b-lg"
-                    onClick={() => setShowMobileMenu(false)}
                   >
                     Logout
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>
 
-            <Link
-              href="/login"
+            {/*  DESKTOP LOGOUT */}
+            <button
+              onClick={handleLogout}
               className="hidden md:flex px-4 h-9 items-center rounded-md
                          bg-white/15 hover:bg-white/25 text-sm"
             >
               Logout
-            </Link>
+            </button>
           </div>
 
           {showMobileSearch && (
@@ -149,10 +147,7 @@ export default function Navbar() {
               className="absolute left-0 right-0 top-full
                          bg-[#2196d9] p-3 md:hidden shadow-lg"
             >
-              <div
-                className="flex items-center bg-white rounded-full
-                              px-4 h-10 gap-2"
-              >
+              <div className="flex items-center bg-white rounded-full px-4 h-10 gap-2">
                 <Search size={16} className="text-gray-400" />
                 <input
                   type="text"

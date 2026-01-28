@@ -4,14 +4,36 @@ import { useState } from "react";
 import Image from "next/image";
 import { User, Lock } from "lucide-react";
 
+import api from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
+
 export default function LoginPage() {
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    document.cookie = "token=demo-token; path=/";
-    window.location.href = "/dashboard";
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
+
+      const { access_token, user } = res.data;
+
+      login(access_token, user);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -27,21 +49,11 @@ export default function LoginPage() {
                      items-center justify-center
                      rounded-xl bg-white shadow"
         >
-          <Image
-            src="/icon.png"
-            alt="EMR Logo"
-            width={40}
-            height={40}
-            priority
-          />
+          <Image src="/icon.png" alt="EMR Logo" width={40} height={40} priority />
         </div>
 
-        <h1 className="text-xl sm:text-2xl font-bold tracking-wide">
-          EMR Hospital
-        </h1>
-        <p className="text-xs sm:text-sm text-gray-500">
-          Electronic Medical Records System
-        </p>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-wide">EMR Hospital</h1>
+        <p className="text-xs sm:text-sm text-gray-500">Electronic Medical Records System</p>
       </div>
 
       <div
@@ -49,9 +61,7 @@ export default function LoginPage() {
                    bg-white rounded-2xl shadow-lg
                    p-6 sm:p-8"
       >
-        <h2 className="text-lg sm:text-xl font-semibold text-center">
-          Welcome back
-        </h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-center">Welcome back</h2>
         <p
           className="text-xs sm:text-sm text-gray-500
                      text-center mt-1 mb-5 sm:mb-6"
@@ -63,10 +73,7 @@ export default function LoginPage() {
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
             <div className="relative">
-              <User
-                className="absolute left-3 top-1/2 -translate-y-1/2
-                               text-gray-400 h-4 w-4"
-              />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
               <input
                 type="email"
                 value={email}
@@ -84,10 +91,7 @@ export default function LoginPage() {
           <div>
             <label className="block text-sm font-medium mb-1">Password</label>
             <div className="relative">
-              <Lock
-                className="absolute left-3 top-1/2 -translate-y-1/2
-                               text-gray-400 h-4 w-4"
-              />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
               <input
                 type="password"
                 value={password}
@@ -102,13 +106,17 @@ export default function LoginPage() {
             </div>
           </div>
 
+          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-blue-500 hover:bg-blue-600
+                       disabled:bg-blue-300
                        text-white font-medium
                        py-2.5 rounded-lg transition"
           >
-            Sign in
+            {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
 

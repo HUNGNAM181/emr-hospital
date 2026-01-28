@@ -1,22 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Breadcrumb from "@/components/breadcrumb";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [openSidebar, setOpenSidebar] = useState(false);
+  const router = useRouter();
+  const { isLoggedIn } = useAuth();
 
+  const [openSidebar, setOpenSidebar] = useState(false);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.replace("/login");
+      return;
+    }
+
+    setReady(true);
+  }, [isLoggedIn, router]);
+
+  // Chưa check xong auth → không render gì
+  if (!ready) return null;
+
+  // ================= UI LOGIC (GIỮ NGUYÊN) =================
   const isActive = (href: string) => {
     if (href === "/dashboard") {
       return pathname === "/dashboard";
@@ -26,20 +40,12 @@ export default function DashboardLayout({
 
   const menuItem = (href: string) =>
     `block px-4 py-2 rounded-md font-medium transition
-     ${
-       isActive(href)
-         ? "bg-[#2196d9] text-white"
-         : "text-gray-700 hover:bg-gray-200"
-     }`;
+     ${isActive(href) ? "bg-[#2196d9] text-white" : "text-gray-700 hover:bg-gray-200"}`;
 
   const SidebarContent = (
     <>
       <nav className="space-y-1">
-        <Link
-          href="/dashboard"
-          className={menuItem("/dashboard")}
-          onClick={() => setOpenSidebar(false)}
-        >
+        <Link href="/dashboard" className={menuItem("/dashboard")} onClick={() => setOpenSidebar(false)}>
           Dashboard
         </Link>
 
@@ -62,21 +68,17 @@ export default function DashboardLayout({
     </>
   );
 
+  // ================= RENDER =================
   return (
     <>
       <Header />
 
       <div className="flex h-[calc(100vh-64px)] overflow-hidden">
-        <aside className="hidden md:block w-60 bg-gray-100 border-r p-4 overflow-y-auto">
-          {SidebarContent}
-        </aside>
+        <aside className="hidden md:block w-60 bg-gray-100 border-r p-4 overflow-y-auto">{SidebarContent}</aside>
 
         {openSidebar && (
           <>
-            <div
-              className="fixed inset-0 bg-black/40 z-40 md:hidden"
-              onClick={() => setOpenSidebar(false)}
-            />
+            <div className="fixed inset-0 bg-black/40 z-40 md:hidden" onClick={() => setOpenSidebar(false)} />
 
             <aside
               className="fixed left-0 top-0 bottom-0 w-64 bg-gray-100
